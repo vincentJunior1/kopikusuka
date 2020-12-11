@@ -18,5 +18,15 @@ module.exports = {
         }
       )
     })
+  },
+  getCategoryByNameModel: (name) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        `SELECT * FROM category WHERE category_name = '${name}'`,
+        (error, result) => {
+          !error ? resolve(result) : reject(new Error(error))
+        }
+      )
+    })
   }
 }

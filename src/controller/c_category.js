@@ -1,14 +1,21 @@
 const {
   getCategoryModel,
-  getCategoryByIdModel
+  getCategoryByIdModel,
+  getCategoryByNameModel
 } = require('../model/category_model')
 const helper = require('../helper/reponse')
 
 module.exports = {
   getCategory: async (req, res) => {
     try {
-      const result = await getCategoryModel()
-      return helper.response(res, 200, 'Success Get Product', result)
+      const { search } = req.query
+      if (search === '' || !search) {
+        const result = await getCategoryModel()
+        return helper.response(res, 200, 'Success Get All Category', result)
+      } else {
+        const result = await getCategoryByNameModel(search)
+        return helper.response(res, 200, 'Success Get Category Name', result)
+      }
     } catch (error) {
       return helper.response(res, 400, 'Data Not Found', error)
     }
