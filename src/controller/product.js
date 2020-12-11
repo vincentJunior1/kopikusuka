@@ -18,8 +18,8 @@ module.exports = {
     try {
       let { page, limit, search, sort } = req.query
       limit = parseInt(limit)
-      if (sort === '') {
-        if (search === '') {
+      if (sort === '' || !sort) {
+        if (search === '' || !search) {
           page = parseInt(page)
           const totalData = await getProductCountModel()
           const totalPage = Math.ceil(totalData / limit)
@@ -85,7 +85,7 @@ module.exports = {
           )
         }
       } else {
-        if (search === '') {
+        if (search === '' || !search) {
           page = parseInt(page)
           const totalData = await getProductCountModel()
           const totalPage = Math.ceil(totalData / limit)
@@ -111,7 +111,7 @@ module.exports = {
           return helper.response(
             res,
             200,
-            'Success Get Product',
+            'Success Get Product And Data is Already Sort',
             result,
             pageInfo
           )

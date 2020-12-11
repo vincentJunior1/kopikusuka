@@ -92,7 +92,6 @@ module.exports = {
       connection.query(
         `SELECT COUNT(*) AS total FROM product WHERE product_name LIKE '%${search}%'`,
         (error, result) => {
-          console.log(result[0])
           !error ? resolve(result[0].total) : reject(new Error(error))
         }
       )
