@@ -90,8 +90,9 @@ module.exports = {
   getProductCountNameModel: (search) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        `SELECT COUNT(*) AS total FROM product WHERE product_name LIKE '${search}'`,
+        `SELECT COUNT(*) AS total FROM product WHERE product_name LIKE '%${search}%'`,
         (error, result) => {
+          console.log(result[0])
           !error ? resolve(result[0].total) : reject(new Error(error))
         }
       )
@@ -107,5 +108,24 @@ module.exports = {
       )
     })
   },
-  getproductByNameSortingModel: () => {}
+  getProductNameSorting: (sorting, limit, offSet) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        `SELECT * FROM product ORDER BY ${sorting} ASC LIMIT ${limit} OFFSET ${offSet}`,
+        (error, result) => {
+          !error ? resolve(result) : reject(new Error(error))
+        }
+      )
+    })
+  },
+  getproductByNameSortinWithPagigModel: (search, sorting, limit, offSet) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        `SELECT * FROM product WHERE product_name LIKE '%${search}%' ORDER BY ${sorting} ASC LIMIT ${limit} OFFSET ${offSet}`,
+        (error, result) => {
+          !error ? resolve(result) : reject(new Error(error))
+        }
+      )
+    })
+  }
 }

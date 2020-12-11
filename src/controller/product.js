@@ -6,7 +6,9 @@ const {
   deleteProductModel,
   getProductCountModel,
   getProductByNameModel,
-  getProductCountNameModel
+  getProductCountNameModel,
+  getproductByNameSortinWithPagigModel,
+  getProductNameSorting
 } = require('../model/product_model')
 const helper = require('../helper/reponse')
 const qs = require('querystring')
@@ -36,8 +38,8 @@ module.exports = {
             totalPage,
             limit,
             totalData,
-            nextLink: nextLink && `http://localhost:3000/?${nextLink}`,
-            prevLink: prevLink && `http://localhost:3000/?${prevLink}`
+            nextLink: nextLink && `http://localhost:3000/product?${nextLink}`,
+            prevLink: prevLink && `http://localhost:3000/product?${prevLink}`
           }
           const result = await getProductModel(limit, offSet)
           return helper.response(
@@ -77,7 +79,7 @@ module.exports = {
           return helper.response(
             res,
             200,
-            'Success Get Product By Name',
+            'Success Get Product With Sorting',
             result,
             pageInfo
           )
@@ -102,10 +104,10 @@ module.exports = {
             totalPage,
             limit,
             totalData,
-            nextLink: nextLink && `http://localhost:3000/?${nextLink}`,
-            prevLink: prevLink && `http://localhost:3000/?${prevLink}`
+            nextLink: nextLink && `http://localhost:3000/product?${nextLink}`,
+            prevLink: prevLink && `http://localhost:3000/product?${prevLink}`
           }
-          const result = await getProductModel(limit, offSet)
+          const result = await getProductNameSorting(sort, limit, offSet)
           return helper.response(
             res,
             200,
@@ -116,7 +118,8 @@ module.exports = {
         } else {
           const totalData = await getProductCountNameModel(search)
           const totalPage = Math.ceil(totalData / limit)
-          if (totalData.length > limit) {
+          console.log(totalData)
+          if (totalData.length >= limit) {
             page = parseInt(page)
           } else {
             page = 1
@@ -139,11 +142,16 @@ module.exports = {
             nextLink: nextLink && `http://localhost:3000/product/?${nextLink}`,
             prevLink: prevLink && `http://localhost:3000/product/?${prevLink}`
           }
-          const result = await getProductByNameModel(search, limit, offSet)
+          const result = await getproductByNameSortinWithPagigModel(
+            search,
+            sort,
+            limit,
+            offSet
+          )
           return helper.response(
             res,
             200,
-            'Success Get Product By Name',
+            'Success Get Product By Name And Sorting',
             result,
             pageInfo
           )
