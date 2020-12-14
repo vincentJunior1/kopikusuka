@@ -3,9 +3,12 @@ const connection = require('../config/mysql')
 module.exports = {
   getCuponModel: () => {
     return new Promise((resolve, reject) => {
-      connection.query('SELECT * FROM cupon', (error, result) => {
-        !error ? resolve(result) : reject(new Error(error))``
-      })
+      connection.query(
+        'SELECT * FROM cupon WHERE cupon_id = 1',
+        (error, result) => {
+          !error ? resolve(result) : reject(new Error(error))``
+        }
+      )
     })
   },
   postCuponModel: (setData) => {

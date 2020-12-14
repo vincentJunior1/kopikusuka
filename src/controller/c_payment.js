@@ -29,7 +29,6 @@ module.exports = {
         history_status: 1,
         payment_method_id: data[0].payment_method
       }
-      console.log(historyData)
       const historyId = await postHistoryData(historyData)
       for (let i = 0; i < allData.length; i++) {
         newData[i] = {

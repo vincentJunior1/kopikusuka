@@ -11,7 +11,7 @@ module.exports = {
   getCupon: async (req, res) => {
     try {
       const result = await getCuponModel()
-      console.log(result)
+      return helper.response(res, 200, 'Success Get Data', result)
     } catch (error) {
       return helper.response(res, 400, 'Cupon Not Found', error)
     }
