@@ -3,7 +3,7 @@ const router = require('Express').Router()
 const {
   getCupon,
   postCupon,
-  updateProduct,
+  updateCupon,
   deleteCupon,
   getCuponById
 } = require('../controller/c_cupon')
@@ -11,7 +11,7 @@ const {
 router.get('/', getCupon)
 router.get('/:id', getCuponById)
 router.post('/', postCupon)
-router.patch('/:id', updateProduct)
+router.patch('/:id', updateCupon)
 router.delete('/:id', deleteCupon)
 
 module.exports = router

@@ -37,7 +37,7 @@ module.exports = {
       return helper.response(res, 400, 'Cupon Not Found', error)
     }
   },
-  updateProduct: async (req, res) => {
+  updateCupon: async (req, res) => {
     try {
       const { id } = req.params
       const {
