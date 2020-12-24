@@ -1,4 +1,5 @@
 const router = require('express').Router()
+const { authorization } = require('../middleware/auth')
 const {
   paymentProduct,
   getHistoryProduct,
@@ -6,9 +7,9 @@ const {
   getAllHistoryData
 } = require('../controller/c_payment')
 
-router.get('/', getAllHistoryData)
-router.post('/', paymentProduct)
-router.get('/:id', getHistoryProduct)
-router.delete('/', deleteHistory)
+router.get('/', authorization, getAllHistoryData)
+router.post('/', authorization, paymentProduct)
+router.get('/:id', authorization, getHistoryProduct)
+router.delete('/', authorization, deleteHistory)
 
 module.exports = router

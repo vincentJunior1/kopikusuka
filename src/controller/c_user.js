@@ -10,14 +10,24 @@ module.exports = {
         user_email,
         user_password,
         user_role,
-        user_status
+        user_status,
+        user_firstname,
+        user_lastname,
+        user_address,
+        user_gender,
+        user_birthday
       } = req.body
       if (
         user_name === '' ||
         user_email === '' ||
         user_password === '' ||
         user_role === '' ||
-        user_status === ''
+        user_status === '' ||
+        user_firstname === '' ||
+        user_lastname === '' ||
+        user_address === '' ||
+        user_gender === '' ||
+        user_birthday === ''
       ) {
         return helper.response(res, 400, 'Please Input every field')
       } else {
@@ -26,6 +36,11 @@ module.exports = {
         const setData = {
           user_name,
           user_email,
+          user_firstname,
+          user_lastname,
+          user_address,
+          user_gender,
+          user_birthday,
           user_password: encryptPassword,
           user_role,
           user_status

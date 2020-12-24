@@ -211,8 +211,8 @@ module.exports = {
         product_status
       }
       console.log(setData)
-      // const result = await postProductModel(setData)
-      // return helper.response(res, 200, 'Data Success Added To Databse', result)
+      const result = await postProductModel(setData)
+      return helper.response(res, 200, 'Data Success Added To Databse', result)
     } catch (error) {
       return helper.response(res, 400, 'BAD METHOD', error)
     }
