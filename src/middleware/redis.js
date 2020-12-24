@@ -38,7 +38,6 @@ module.exports = {
   },
   clearDataProductRedis: (req, res, next) => {
     client.keys('getproduct*', (_error, result) => {
-      console.log(result)
       if (result.length > 0) {
         result.forEach((value) => {
           client.del(value)

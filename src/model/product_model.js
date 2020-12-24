@@ -4,7 +4,7 @@ module.exports = {
   getProductModel: (limit, offSet) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        'SELECT * FROM product LIMIT ? OFFSET ?',
+        'SELECT * FROM product LIMIT ? OFFSET ? WHERE product_status = 1',
         [limit, offSet],
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error))
@@ -15,9 +15,10 @@ module.exports = {
   getProductByIdModel: (id) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        'SELECT * FROM product WHERE product_id = ?',
+        'SELECT * FROM product WHERE product_id = ? AND product_status = 1',
         id,
         (error, result) => {
+          console.log(error)
           !error ? resolve(result) : reject(new Error(error))
         }
       )

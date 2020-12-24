@@ -3,7 +3,6 @@ const {
   getProductByIdModel,
   postProductModel,
   patchProductModel,
-  deleteProductModel,
   getProductCountModel,
   getProductByNameModel,
   getProductCountNameModel,
@@ -13,6 +12,7 @@ const {
 const helper = require('../helper/reponse')
 const qs = require('querystring')
 const redis = require('redis')
+const fs = require('fs')
 const client = redis.createClient()
 
 module.exports = {
@@ -210,7 +210,6 @@ module.exports = {
         product_created_at: new Date(),
         product_status
       }
-      console.log(setData)
       const result = await postProductModel(setData)
       return helper.response(res, 200, 'Data Success Added To Databse', result)
     } catch (error) {
@@ -253,10 +252,22 @@ module.exports = {
       const { id } = req.params
       const checkId = await getProductByIdModel(id)
       if (checkId.length > 0) {
-        const result = await deleteProductModel(id)
-        return helper.response(res, 200, 'Data Has Been Deleted', result)
+        const newData = {
+          ...checkId[0],
+          ...{ product_status: 0 }
+        }
+        fs.unlink('./uploads/' + newData.product_image, (err, next) => {
+          if (err) {
+            console.log('oke')
+            return helper.response(res, 400, 'Failed Delete Image', err)
+          } else {
+            patchProductModel(id, newData)
+            return helper.response(res, 200, 'Data Has Been Deleted')
+          }
+        })
+        console.log(newData)
       } else {
-        return helper.response(res, 200, 'Data Not Fund')
+        return helper.response(res, 404, 'Data Not Fund')
       }
     } catch (error) {
       return helper.response(res, 404, 'Data Has Not Been Deleted', error)
