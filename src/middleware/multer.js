@@ -11,6 +11,8 @@ const storage = multer.diskStorage({
   }
 })
 
+const maxSize = 1 * 2000 * 2000
+
 const fileFilter = (req, file, cb) => {
   if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
     cb(null, true)
@@ -20,7 +22,11 @@ const fileFilter = (req, file, cb) => {
     // console.log('false')
   }
 }
-const upload = multer({ storage, fileFilter }).single('product_image')
+const upload = multer({
+  storage,
+  limits: { fileSize: maxSize },
+  fileFilter
+}).single('product_image')
 
 const uploadFilter = (req, res, next) => {
   upload(req, res, function (err) {
