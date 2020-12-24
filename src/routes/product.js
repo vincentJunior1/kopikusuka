@@ -22,6 +22,7 @@ router.patch(
   authorization,
   isAdmin,
   clearDataProductRedis,
+  uploadImage,
   patchProduct
 )
 router.delete(

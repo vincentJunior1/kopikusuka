@@ -226,6 +226,7 @@ module.exports = {
         product_name,
         product_price,
         product_desc,
+        size_id,
         product_status
       } = req.body
       const setData = {
@@ -233,15 +234,40 @@ module.exports = {
         product_name,
         product_price,
         product_desc,
+        size_id,
         product_updated_at: new Date(),
         product_status
       }
       const checkId = await getProductByIdModel(id)
-      if (checkId.length > 0) {
-        const result = await patchProductModel(id, setData)
-        return helper.response(res, 200, 'Data Has Been Updated', result)
+      if (req.file === undefined) {
+        console.log('here')
+        if (checkId.length > 0) {
+          const newData = {
+            ...setData,
+            ...{ product_image: checkId[0].product_image }
+          }
+          const result = await patchProductModel(id, newData)
+          return helper.response(res, 200, 'Data Has Been Updated', result)
+        } else {
+          return helper.response(res, 404, `Data Not Found By Id ${id}`)
+        }
       } else {
-        return helper.response(res, 404, `Data Not Found By Id ${id}`)
+        if (checkId.length > 0) {
+          const newData = {
+            ...setData,
+            ...{ product_image: req.file.filename }
+          }
+          fs.unlink('./uploads/' + checkId[0].product_image, async (err) => {
+            if (err) {
+              return helper.response(res, 400, 'Data Failed Update')
+            } else {
+              const result = await patchProductModel(id, newData)
+              return helper.response(res, 200, 'Data Has Been Updated', result)
+            }
+          })
+        } else {
+          return helper.response(res, 404, `Data Not Found By Id ${id}`)
+        }
       }
     } catch (error) {
       return helper.response(res, 400, 'Data Failed Update', error)
@@ -265,7 +291,6 @@ module.exports = {
             return helper.response(res, 200, 'Data Has Been Deleted')
           }
         })
-        console.log(newData)
       } else {
         return helper.response(res, 404, 'Data Not Fund')
       }

@@ -18,7 +18,6 @@ module.exports = {
         'SELECT * FROM product WHERE product_id = ? AND product_status = 1',
         id,
         (error, result) => {
-          console.log(error)
           !error ? resolve(result) : reject(new Error(error))
         }
       )
@@ -45,6 +44,7 @@ module.exports = {
         'UPDATE product SET ? WHERE product_id = ?',
         [setData, id],
         (error, result) => {
+          console.log(error)
           if (!error) {
             const newResult = {
               product_id: id,
