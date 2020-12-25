@@ -1,5 +1,6 @@
 const router = require('Express').Router()
 const { authorization, isAdmin } = require('../middleware/auth')
+const { getCuponRedis, clearDataCuponRedis } = require('../middleware/redis')
 
 const {
   getCupon,
@@ -9,10 +10,10 @@ const {
   getCuponById
 } = require('../controller/c_cupon')
 
-router.get('/', getCupon)
+router.get('/', getCuponRedis, getCupon)
 router.get('/:id', getCuponById)
 router.post('/', authorization, isAdmin, postCupon)
-router.patch('/:id', authorization, isAdmin, updateCupon)
-router.delete('/:id', authorization, isAdmin, deleteCupon)
+router.patch('/:id', authorization, isAdmin, clearDataCuponRedis, updateCupon)
+router.delete('/:id', authorization, isAdmin, clearDataCuponRedis, deleteCupon)
 
 module.exports = router

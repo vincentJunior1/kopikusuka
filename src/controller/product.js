@@ -87,6 +87,15 @@ module.exports = {
             prevLink: prevLink && `http://localhost:3000/product/?${prevLink}`
           }
           const result = await getProductByNameModel(search, limit, offSet)
+          const newData = {
+            result,
+            pageInfo
+          }
+          client.setex(
+            `getproduct:${JSON.stringify(req.query)}`,
+            3600,
+            JSON.stringify(newData)
+          )
           return helper.response(
             res,
             200,
@@ -119,6 +128,15 @@ module.exports = {
             prevLink: prevLink && `http://localhost:3000/product?${prevLink}`
           }
           const result = await getProductNameSorting(sort, limit, offSet)
+          const newData = {
+            result,
+            pageInfo
+          }
+          client.setex(
+            `getproduct:${JSON.stringify(req.query)}`,
+            3600,
+            JSON.stringify(newData)
+          )
           return helper.response(
             res,
             200,
@@ -159,6 +177,15 @@ module.exports = {
             limit,
             offSet
           )
+          const newData = {
+            result,
+            pageInfo
+          }
+          client.setex(
+            `getproduct:${JSON.stringify(req.query)}`,
+            3600,
+            JSON.stringify(newData)
+          )
           return helper.response(
             res,
             200,
@@ -169,7 +196,7 @@ module.exports = {
         }
       }
     } catch (error) {
-      return helper.response(res, 400, 'Bad Request', error)
+      return helper.response(res, 400, "Can't get data product", error)
     }
   },
   getProductById: async (req, res) => {

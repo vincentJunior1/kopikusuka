@@ -3,7 +3,8 @@ const { authorization, isAdmin } = require('../middleware/auth')
 const uploadImage = require('../middleware/multer')
 const {
   getProductByIdRedis,
-  clearDataProductRedis
+  clearDataProductRedis,
+  getProductRedis
 } = require('../middleware/redis')
 const {
   getProduct,
@@ -14,7 +15,7 @@ const {
   // getProductByCategory
 } = require('../controller/product')
 
-router.get('/', authorization, getProduct)
+router.get('/', authorization, getProductRedis, getProduct)
 router.get('/:id', getProductByIdRedis, getProductById)
 router.post('/', authorization, isAdmin, uploadImage, postProduct)
 router.patch(

@@ -5,12 +5,16 @@ const {
   getCuponById,
   deleteCuponModel
 } = require('../model/cupon_model')
+const redis = require('redis')
+const fs = require('fs')
+const client = redis.createClient()
 const helper = require('../helper/reponse')
 
 module.exports = {
   getCupon: async (req, res) => {
     try {
       const result = await getCuponModel()
+      client.setex('getcupon:', 3600, JSON.stringify(result))
       return helper.response(res, 200, 'Success Get Data', result)
     } catch (error) {
       return helper.response(res, 400, 'Cupon Not Found', error)
