@@ -1,4 +1,6 @@
 const helper = require('../helper/reponse')
+const redis = require('redis')
+const client = redis.createClient()
 const {
   getHistoryCount,
   postHistoryData,
@@ -50,6 +52,7 @@ module.exports = {
   getAllHistoryData: async (req, res) => {
     try {
       const result = await getAllHistoryDataModel()
+      client.setex('gethistorydata', 3600, JSON.stringify(result))
       return helper.response(res, 200, 'Success Get All Data History', result)
     } catch (error) {
       return helper.response(res, 400, 'Internal Issue', error)
@@ -59,6 +62,7 @@ module.exports = {
     try {
       const { id } = req.params
       const result = await getHistoryDetailModel(id)
+      client.setex(`gethistorydatabyid:${id}`, 3600, JSON.stringify(result))
       return helper.response(res, 200, 'Success Get Data History', result)
     } catch (error) {
       return helper.response(res, 404, 'Data Not Found', error)

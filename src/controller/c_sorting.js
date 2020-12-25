@@ -3,6 +3,8 @@ const {
   getProductCountModel,
   getProductByCategory
 } = require('../model/sorting_model')
+const redis = require('redis')
+const client = redis.createClient()
 const qs = require('querystring')
 
 module.exports = {
@@ -32,6 +34,15 @@ module.exports = {
         prevLink: prevLink && `http://localhost:3000/product?${prevLink}`
       }
       const result = await getProductByCategory(id, limit, offSet)
+      const newData = {
+        result,
+        pageInfo
+      }
+      client.setex(
+        `getsorting:${id} ${JSON.stringify(req.query)}`,
+        3600,
+        JSON.stringify(newData)
+      )
       return helper.response(res, 200, 'Success Get Product', result, pageInfo)
     } catch (error) {
       return helper.response(res, 404, 'Data Not Found', error)
