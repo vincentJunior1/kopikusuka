@@ -1,7 +1,12 @@
 const bcrypt = require('bcrypt')
 const helper = require('../helper/reponse')
 const jwt = require('jsonwebtoken')
-const { registerUserModel, getDataUserEmail } = require('../model/user_model')
+const {
+  registerUserModel,
+  getDataUserEmail,
+  getDataUserModel,
+  patchUserData
+} = require('../model/user_model')
 module.exports = {
   registerUser: async (req, res) => {
     try {
@@ -93,6 +98,43 @@ module.exports = {
       }
     } catch (error) {
       return helper.response(res, 404, 'user Not Found', error)
+    }
+  },
+  patchProfile: async (req, res) => {
+    try {
+      const { user_id } = req.decodeToken
+      const {
+        user_name,
+        user_email,
+        user_firstname,
+        user_lastname,
+        user_address,
+        user_gender,
+        user_birthday
+      } = req.body
+      const setData = {
+        user_name,
+        user_email,
+        user_firstname,
+        user_lastname,
+        user_address,
+        user_gender,
+        user_birthday: new Date(user_birthday),
+        user_updated_at: new Date()
+      }
+      const dataUser = await getDataUserModel(user_id)
+      if (dataUser.length === 0) {
+        return helper.response(res, 404, 'Data Not Found')
+      } else {
+        const newData = {
+          ...dataUser[0],
+          ...setData
+        }
+        const result = await patchUserData(newData, user_id)
+        return helper.response(res, 200, 'Success Edit Profile', result)
+      }
+    } catch (error) {
+      return helper.response(res, 400, 'Failed Update Profile', error)
     }
   }
 }

@@ -6,6 +6,7 @@ const payment = require('./routes/payment')
 const Size = require('./routes/r_size')
 const Sorting = require('./routes/r_sorting')
 const User = require('./routes/user')
+const Dashboard = require('./routes/r_dashboard')
 
 router.use('/product', product)
 router.use('/category', category)
@@ -14,5 +15,6 @@ router.use('/payment', payment)
 router.use('/size', Size)
 router.use('/sorting', Sorting)
 router.use('/user', User)
+router.use('/dashboard', Dashboard)
 
 module.exports = router
