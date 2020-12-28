@@ -16,6 +16,7 @@ module.exports = {
   paymentProduct: async (req, res) => {
     try {
       const data = req.body
+      const { user_id } = req.decodeToken
       const newData = []
       const allData = data.slice(1, data.length)
       const dataPrice = allData.map((x) => x.product_price * x.quantity)
@@ -29,7 +30,8 @@ module.exports = {
         history_subtotal:
           dataSubtotal + data[0].history_tax + data[0].delivery_price,
         history_status: 1,
-        payment_method_id: data[0].payment_method
+        payment_method_id: data[0].payment_method,
+        user_id
       }
       const historyId = await postHistoryData(historyData)
       for (let i = 0; i < allData.length; i++) {

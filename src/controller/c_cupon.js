@@ -8,6 +8,7 @@ const {
 const redis = require('redis')
 const client = redis.createClient()
 const helper = require('../helper/reponse')
+const fs = require('fs')
 
 module.exports = {
   getCupon: async (req, res) => {
@@ -32,6 +33,7 @@ module.exports = {
         cupon_name,
         cupon_discount,
         cupon_description,
+        cupon_image: req.file === undefined ? '' : req.file.filename,
         cupon_status
       }
       const result = await postCuponModel(setData)
@@ -50,7 +52,7 @@ module.exports = {
         cupon_status
       } = req.body
 
-      const newData = {
+      const setData = {
         cupon_name,
         cupon_discount,
         cupon_description,
@@ -59,11 +61,52 @@ module.exports = {
       }
 
       const checkId = await getCuponById(id)
-      if (checkId.length <= 0) {
-        return helper.response(res, 404, 'Cupon Not Found')
+      if (req.file === undefined) {
+        if (checkId.length <= 0) {
+          return helper.response(res, 404, 'Cupon Not Found')
+        } else {
+          const newData = {
+            ...setData,
+            ...{ cupon_image: checkId[0].product_image }
+          }
+          const result = await updateCuponModel(newData, id)
+          return helper.response(res, 200, 'Cupon Has Been Updated', result)
+        }
       } else {
-        const result = await updateCuponModel(newData, id)
-        return helper.response(res, 200, 'Cupon Has Been Updated', result)
+        if (checkId.length <= 0) {
+          return helper.response(res, 404, 'Cupon Not Found')
+        } else {
+          if (checkId[0].cupon_image === '') {
+            const newData = {
+              ...setData,
+              ...{ cupon_image: req.file.filename }
+            }
+            const result = await updateCuponModel(newData, id)
+            return helper.response(res, 200, 'Cupon Has Been Updated', result)
+          } else {
+            fs.unlink(
+              './uploads/cupon/' + checkId[0].cupon_image,
+              async (err) => {
+                if (err) {
+                  console.log(err)
+                  return helper.response(res, 400, 'Failed Change Image Cupon')
+                } else {
+                  const newData = {
+                    ...setData,
+                    ...{ cupon_image: req.file.filename }
+                  }
+                  const result = await updateCuponModel(newData, id)
+                  return helper.response(
+                    res,
+                    200,
+                    'Cupon Has Been Updated',
+                    result
+                  )
+                }
+              }
+            )
+          }
+        }
       }
     } catch (error) {
       return helper.response(res, 400, 'Failed Update Cupon', error)
@@ -73,16 +116,21 @@ module.exports = {
     try {
       const { id } = req.params
       const checkId = await getCuponById(id)
-      console.log(checkId)
       if (checkId.length <= 0) {
         return helper.response(res, 404, 'Cupon Not Found')
       } else {
         const newData = {
           ...checkId[0],
-          cupon_status: 0
+          ...{ cupon_image: '', cupon_status: 0 }
         }
-        await deleteCuponModel(newData, id)
-        return helper.response(res, 200, 'Success Delete Data')
+        fs.unlink('./uploads/cupon/' + checkId[0].cupon_image, async (err) => {
+          if (err) {
+            return helper.response(res, 400, 'Failed Delete Image')
+          } else {
+            await deleteCuponModel(newData, id)
+            return helper.response(res, 200, 'Success Delete Data')
+          }
+        })
       }
     } catch (error) {
       return helper.response(res, 400, 'Failed Delete Cupon', error)
