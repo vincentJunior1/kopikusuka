@@ -31,6 +31,26 @@ module.exports = {
       )
     })
   },
+  getDataInvoiceIntervalPerWeek: () => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        'SELECT SUM(history_subtotal) as invoice_perweek, history_created_at FROM`history` WHERE MONTH(history_created_at) = MONTH(NOW()) GROUP BY WEEK(history_created_at)',
+        (error, result) => {
+          !error ? resolve(result) : reject(new Error(error))
+        }
+      )
+    })
+  },
+  getDataInvoicePerDay: () => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        'SELECT SUM(history_subtotal) as invoice_perweek, history_created_at FROM`history` WHERE WEEK(history_created_at) = WEEK(NOW()) GROUP BY DaTE(history_created_at)',
+        (error, result) => {
+          !error ? resolve(result) : reject(new Error(error))
+        }
+      )
+    })
+  },
   countAllInvoiceToday: () => {
     return new Promise((resolve, reject) => {
       connection.query(
