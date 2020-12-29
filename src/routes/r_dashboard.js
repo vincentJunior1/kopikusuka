@@ -1,4 +1,4 @@
-const router = require('Express').Router()
+const router = require('express').Router()
 const { getDataChart } = require('../controller/c_dashboard')
 
 router.get('/', getDataChart)
