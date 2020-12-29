@@ -1,4 +1,4 @@
-const router = require('express').Router()
+const router = require('Express').Router()
 const { getSize } = require('../controller/c_size')
 
 router.get('/', getSize)

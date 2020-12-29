@@ -1,4 +1,4 @@
-const router = require('express').Router()
+const router = require('Express').Router()
 const { authorization } = require('../middleware/auth')
 const {
   getHistoryDataRedis,

@@ -1,7 +1,9 @@
 const helper = require('../helper/reponse')
 const {
   getDataInvoicePermonth,
-  getDataInvoicePeryear
+  getDataInvoicePeryear,
+  getDataInvoiceInterval,
+  countAllInvoiceToday
 } = require('../model/dashboard_model')
 
 module.exports = {
@@ -9,9 +11,13 @@ module.exports = {
     try {
       const invoiceMonth = await getDataInvoicePermonth()
       const invoiceYear = await getDataInvoicePeryear()
+      const intervalInvoice = await getDataInvoiceInterval()
+      const getAllInvoiceToday = await countAllInvoiceToday()
       const allInvoice = {
         invoiceYear,
-        invoiceMonth
+        invoiceMonth,
+        intervalInvoice,
+        getAllInvoiceToday
       }
       return helper.response(
         res,
