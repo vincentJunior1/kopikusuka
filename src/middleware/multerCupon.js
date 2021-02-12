@@ -34,7 +34,6 @@ const uploadFilter = (req, res, next) => {
     } else if (err) {
       return helper.response(res, 400, err.message)
     }
-    console.log(req.body)
     next()
     // Everything went fine.
   })

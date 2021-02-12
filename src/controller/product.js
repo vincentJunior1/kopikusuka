@@ -224,15 +224,34 @@ module.exports = {
         category_id,
         product_name,
         product_price,
+        size_id,
+        delivery_method_id,
         product_desc,
         product_status
       } = req.body
-
+      let x = ''
+      let c = ''
+      for (let i = 0; i < size_id.length; i++) {
+        if (size_id[i] !== ',') {
+          x += size_id[i]
+        }
+      }
+      for (let i = 0; i < delivery_method_id.length; i++) {
+        if (delivery_method_id[i] !== ',') {
+          c += delivery_method_id[i]
+        }
+      }
+      const z = c.split('')
+      const f = x.split('')
+      const tempDelivery = z.join(',')
+      const tempSize = f.join(',')
       const setData = {
         category_id,
         product_name,
         product_price,
         product_desc,
+        size_id: tempSize,
+        delivery_method_id: tempDelivery,
         product_image: req.file === undefined ? '' : req.file.filename,
         product_created_at: new Date(),
         product_status
@@ -309,15 +328,20 @@ module.exports = {
           ...checkId[0],
           ...{ product_status: 0 }
         }
-        fs.unlink('./uploads/' + newData.product_image, (err, next) => {
-          if (err) {
-            console.log('oke')
-            return helper.response(res, 400, 'Failed Delete Image', err)
-          } else {
-            patchProductModel(id, newData)
-            return helper.response(res, 200, 'Data Has Been Deleted')
-          }
-        })
+        if (checkId[0].product_image === '') {
+          patchProductModel(id, newData)
+          return helper.response(res, 200, 'Data Has Been Deleted')
+        } else {
+          fs.unlink('./uploads/' + newData.product_image, (err, next) => {
+            if (err) {
+              console.log('oke')
+              return helper.response(res, 400, 'Failed Delete Image', err)
+            } else {
+              patchProductModel(id, newData)
+              return helper.response(res, 200, 'Data Has Been Deleted')
+            }
+          })
+        }
       } else {
         return helper.response(res, 404, 'Data Not Fund')
       }

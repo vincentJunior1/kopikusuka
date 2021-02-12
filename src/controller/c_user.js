@@ -7,6 +7,7 @@ const {
   getDataUserModel,
   patchUserData
 } = require('../model/user_model')
+const fs = require('fs')
 module.exports = {
   registerUser: async (req, res) => {
     try {
@@ -20,19 +21,14 @@ module.exports = {
         user_lastname,
         user_address,
         user_gender,
-        user_birthday
+        user_birthday,
+        user_phone
       } = req.body
       if (
-        user_name === '' ||
         user_email === '' ||
         user_password === '' ||
-        user_role === '' ||
         user_status === '' ||
-        user_firstname === '' ||
-        user_lastname === '' ||
-        user_address === '' ||
-        user_gender === '' ||
-        user_birthday === ''
+        user_phone === ''
       ) {
         return helper.response(res, 400, 'Please Input every field')
       } else {
@@ -77,6 +73,13 @@ module.exports = {
             user_id,
             user_name,
             user_email,
+            user_address,
+            user_phone,
+            user_image,
+            user_firstname,
+            user_lastname,
+            user_gender,
+            user_birthday,
             user_role,
             user_status
           } = dataUser[0]
@@ -84,6 +87,13 @@ module.exports = {
             user_id,
             user_name,
             user_email,
+            user_address,
+            user_phone,
+            user_image,
+            user_firstname,
+            user_lastname,
+            user_gender,
+            user_birthday,
             user_role,
             user_status
           }
@@ -122,16 +132,50 @@ module.exports = {
         user_birthday: new Date(user_birthday),
         user_updated_at: new Date()
       }
-      const dataUser = await getDataUserModel(user_id)
-      if (dataUser.length === 0) {
-        return helper.response(res, 404, 'Data Not Found')
-      } else {
-        const newData = {
-          ...dataUser[0],
-          ...setData
+      console.log('ok')
+      if (req.file === undefined) {
+        const dataUser = await getDataUserModel(user_id)
+        if (dataUser.length === 0) {
+          console.log('error 1')
+          return helper.response(res, 404, 'Data Not Found')
+        } else {
+          const newData = {
+            ...dataUser[0],
+            ...setData
+          }
+          const result = await patchUserData(newData, user_id)
+          return helper.response(res, 200, 'Success Edit Profile', result)
         }
-        const result = await patchUserData(newData, user_id)
-        return helper.response(res, 200, 'Success Edit Profile', result)
+      } else {
+        const dataUser = await getDataUserModel(user_id)
+        if (dataUser.length < 0) {
+          return helper.response(res, 404, 'Data Not Found')
+        } else {
+          if (dataUser[0].user_image === '') {
+            const newData = {
+              ...dataUser[0],
+              ...setData,
+              ...{ user_image: req.file.filename }
+            }
+            const result = await patchUserData(newData, user_id)
+            return helper.response(res, 200, 'Success Edit Profile', result)
+          } else {
+            fs.unlink('./uploads/' + dataUser[0].user_image, async (err) => {
+              if (err) {
+                console.log('data Error')
+                return helper.response(res, 404, 'Data Not Found')
+              } else {
+                const newData = {
+                  ...dataUser[0],
+                  ...setData,
+                  ...{ user_image: req.file.filename }
+                }
+                const result = await patchUserData(newData, user_id)
+                return helper.response(res, 200, 'Success Edit Profile', result)
+              }
+            })
+          }
+        }
       }
     } catch (error) {
       return helper.response(res, 400, 'Failed Update Profile', error)

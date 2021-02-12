@@ -157,6 +157,7 @@ module.exports = {
         result.forEach((value) => {
           client.del(value)
         })
+        next()
       } else {
         next()
       }

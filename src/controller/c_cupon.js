@@ -26,15 +26,29 @@ module.exports = {
         cupon_name,
         cupon_discount,
         cupon_description,
-        cupon_status
+        cupon_price,
+        cupon_status,
+        size_id,
+        delivery_method_id,
+        cupon_code,
+        cupon_started_at,
+        cupon_ended_at,
+        category_id
       } = req.body
 
       const setData = {
         cupon_name,
         cupon_discount,
         cupon_description,
+        cupon_price,
         cupon_image: req.file === undefined ? '' : req.file.filename,
-        cupon_status
+        cupon_status,
+        size_id,
+        delivery_method_id,
+        cupon_code,
+        cupon_started_at,
+        cupon_ended_at,
+        category_id
       }
       const result = await postCuponModel(setData)
       return helper.response(res, 200, 'Cupon Has Been Created', result)
@@ -47,19 +61,24 @@ module.exports = {
       const { id } = req.params
       const {
         cupon_name,
+        cupon_price,
+        cupon_code,
+        cupon_started_at,
+        cupon_ended_at,
         cupon_discount,
-        cupon_description,
-        cupon_status
+        cupon_description
       } = req.body
-
+      console.log('jalan')
       const setData = {
         cupon_name,
         cupon_discount,
         cupon_description,
-        cupon_updated_at: new Date(),
-        cupon_status
+        cupon_price,
+        cupon_code,
+        cupon_started_at,
+        cupon_ended_at,
+        cupon_updated_at: new Date()
       }
-
       const checkId = await getCuponById(id)
       if (req.file === undefined) {
         if (checkId.length <= 0) {
@@ -116,6 +135,7 @@ module.exports = {
     try {
       const { id } = req.params
       const checkId = await getCuponById(id)
+      console.log('ok')
       if (checkId.length <= 0) {
         return helper.response(res, 404, 'Cupon Not Found')
       } else {
@@ -123,14 +143,22 @@ module.exports = {
           ...checkId[0],
           ...{ cupon_image: '', cupon_status: 0 }
         }
-        fs.unlink('./uploads/cupon/' + checkId[0].cupon_image, async (err) => {
-          if (err) {
-            return helper.response(res, 400, 'Failed Delete Image')
-          } else {
-            await deleteCuponModel(newData, id)
-            return helper.response(res, 200, 'Success Delete Data')
-          }
-        })
+        if (checkId[0].cupon_image === '') {
+          await deleteCuponModel(newData, id)
+          return helper.response(res, 200, 'Success Delete Data')
+        } else {
+          fs.unlink(
+            './uploads/cupon/' + checkId[0].cupon_image,
+            async (err) => {
+              if (err) {
+                return helper.response(res, 400, 'Failed Delete Image')
+              } else {
+                await deleteCuponModel(newData, id)
+                return helper.response(res, 200, 'Success Delete Data')
+              }
+            }
+          )
+        }
       }
     } catch (error) {
       return helper.response(res, 400, 'Failed Delete Cupon', error)

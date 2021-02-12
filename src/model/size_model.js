@@ -10,5 +10,12 @@ module.exports = {
         }
       )
     })
+  },
+  getAllDelivery: () => {
+    return new Promise((resolve, reject) => {
+      connection.query('SELECT * FROM delivery_method', (error, result) => {
+        !error ? resolve(result) : reject(new Error(error))
+      })
+    })
   }
 }

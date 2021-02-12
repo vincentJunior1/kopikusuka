@@ -15,7 +15,7 @@ const {
   // getProductByCategory
 } = require('../controller/product')
 
-router.get('/', getProductRedis, getProduct)
+router.get('/', authorization, getProductRedis, getProduct)
 router.get('/:id', getProductByIdRedis, getProductById)
 router.post('/', authorization, isAdmin, uploadImage, postProduct)
 router.patch(

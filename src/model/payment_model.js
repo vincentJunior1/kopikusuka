@@ -36,12 +36,7 @@ module.exports = {
   getAllDetailData: (historyId) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        `SELECT 
-        product.product_name,history.history_invoice,history_detail.history_detail_quantity,product.product_price,history_detail.history_detail_price 
-        FROM history_detail 
-        LEFT JOIN history ON history_detail.history_id = history.history_id 
-        LEFT JOIN product ON history_detail.product_id = product.product_id 
-        WHERE history_detail.history_id = ${historyId}`,
+        `SELECT * FROM history_detail WHERE history_id = ${historyId}`,
         (error, result) => {
           !error ? resolve(result) : reject(error)
         }

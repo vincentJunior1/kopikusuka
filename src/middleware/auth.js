@@ -11,7 +11,7 @@ module.exports = {
           (error && error.name === 'JsonWebTokenError') ||
           (error && error.name === 'TokenExpiredError')
         ) {
-          return helper.response(res, 400, error.message)
+          return helper.response(res, 403, error.message)
         } else {
           req.decodeToken = result
           next()

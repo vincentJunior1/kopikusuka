@@ -6,11 +6,11 @@ const cors = require('cors')
 require('dotenv').config()
 const routesNavigation = require('./src/routesNavigation')
 
+app.use(cors())
 app.use(morgan('dev'))
 app.use(express.static('uploads'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
-app.use(cors())
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*')
   res.header(

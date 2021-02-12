@@ -18,17 +18,14 @@ module.exports = {
       const data = req.body
       const { user_id } = req.decodeToken
       const newData = []
+      console.log(data)
       const allData = data.slice(1, data.length)
-      const dataPrice = allData.map((x) => x.product_price * x.quantity)
-      const totalPrice = (x, y) => x + y
-      const dataSubtotal = dataPrice.reduce(totalPrice)
       const total = await getHistoryCount()
       const historyData = {
         history_invoice: 'KKS-' + (total + 1),
         history_tax: data[0].history_tax,
         history_delivery_price: data[0].delivery_price,
-        history_subtotal:
-          dataSubtotal + data[0].history_tax + data[0].delivery_price,
+        history_subtotal: data[0].history_total,
         history_status: 1,
         payment_method_id: data[0].payment_method,
         user_id
@@ -36,10 +33,10 @@ module.exports = {
       const historyId = await postHistoryData(historyData)
       for (let i = 0; i < allData.length; i++) {
         newData[i] = {
-          product_id: allData[i].product_id,
-          history_detail_quantity: allData[i].quantity,
-          history_detail_price: dataPrice[i],
-          size_id: allData[i].size_id,
+          product_name: allData[i].product_name,
+          history_detail_quantity: allData[i].history_detail_quantity,
+          history_detail_price: allData[i].product_price,
+          size_product: allData[i].history_size,
           history_detail_status: 1,
           history_id: historyId
         }
@@ -48,6 +45,7 @@ module.exports = {
       const result = await getAllDetailData(historyId)
       return helper.response(res, 200, 'Product Will Be processes', result)
     } catch (error) {
+      console.log(error)
       return helper.response(res, 400, 'Failed Buy Product', error)
     }
   },

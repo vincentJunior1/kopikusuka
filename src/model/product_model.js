@@ -32,6 +32,7 @@ module.exports = {
           }
           resolve(newResult)
         } else {
+          console.log(error)
           reject(new Error(error))
         }
       })
@@ -80,7 +81,7 @@ module.exports = {
   getProductCountModel: () => {
     return new Promise((resolve, reject) => {
       connection.query(
-        'SELECT COUNT(*) AS total FROM product',
+        'SELECT COUNT(*) AS total FROM product WHERE product_status = 1',
         (error, result) => {
           !error ? resolve(result[0].total) : reject(new Error(error))
         }
@@ -100,7 +101,7 @@ module.exports = {
   getProductByNameModel: (search, limit, offSet) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        `SELECT * FROM product WHERE product_name LIKE '%${search}%' LIMIT ${limit} OFFSET ${offSet}`,
+        `SELECT * FROM product WHERE product_name LIKE '%${search}%' AND product_status = 1 LIMIT ${limit} OFFSET ${offSet}`,
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error))
         }
