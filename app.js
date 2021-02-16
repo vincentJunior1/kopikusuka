@@ -8,7 +8,7 @@ const routesNavigation = require('./src/routesNavigation')
 
 app.use(cors())
 app.use(morgan('dev'))
-app.use('/api1', express.static('uploads'))
+app.use('/api2', express.static('uploads'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use((req, res, next) => {
@@ -19,7 +19,7 @@ app.use((req, res, next) => {
   )
   next()
 })
-app.use('/api1', routesNavigation)
+app.use('/api2', routesNavigation)
 app.get('*', (req, res) => {
   res.status(404).send('path not found')
 })
