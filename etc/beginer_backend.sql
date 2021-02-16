@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 16, 2021 at 12:10 PM
+-- Generation Time: Feb 16, 2021 at 12:32 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.1
 
@@ -95,18 +95,17 @@ INSERT INTO `cupon` (`cupon_id`, `cupon_name`, `cupon_discount`, `cupon_descript
 
 CREATE TABLE `delivery_method` (
   `delivery_method_id` int(11) NOT NULL,
-  `delivery_method_type` varchar(255) NOT NULL,
-  `delivery_method_created_at` date NOT NULL DEFAULT current_timestamp()
+  `delivery_method_type` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `delivery_method`
 --
 
-INSERT INTO `delivery_method` (`delivery_method_id`, `delivery_method_type`, `delivery_method_created_at`) VALUES
-(1, 'Home Delivery', '0000-00-00'),
-(2, 'Dine In', '0000-00-00'),
-(3, 'Take Away', '0000-00-00');
+INSERT INTO `delivery_method` (`delivery_method_id`, `delivery_method_type`) VALUES
+(1, 'Home Delivery'),
+(2, 'Dine In'),
+(3, 'Take Away');
 
 -- --------------------------------------------------------
 
