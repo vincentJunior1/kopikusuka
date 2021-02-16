@@ -32,6 +32,7 @@ module.exports = {
         allInvoice
       )
     } catch (error) {
+      console.log(error)
       return helper.response(res, 404, 'Data Not Found', error)
     }
   }
