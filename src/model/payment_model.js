@@ -83,18 +83,14 @@ module.exports = {
       )
     })
   },
-  getAllHistoryDataModel: () => {
+  getAllHistoryDataModel: (user_id) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        `SELECT 
-        product.product_name,history.history_invoice,history_detail.history_detail_quantity,
-        product.product_price,history_detail.history_detail_price,category.category_name,size.size_type 
+        `SELECT * 
             FROM history_detail 
             LEFT JOIN history ON history_detail.history_id = history.history_id 
-            LEFT JOIN product ON history_detail.product_id = product.product_id
-            LEFT JOIN category ON product.category_id = category.category_id
-            LEFT JOIN size ON history_detail.size_id = size.size_id 
-            WHERE history_detail_status = 1`,
+            LEFT JOIN user ON history.user_id = user.user_id
+            WHERE history.user_id = ${user_id} AND history_detail_status = 1`,
         (error, result) => {
           !error ? resolve(result) : reject(error)
         }

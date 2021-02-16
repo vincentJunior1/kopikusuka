@@ -18,7 +18,6 @@ module.exports = {
       const data = req.body
       const { user_id } = req.decodeToken
       const newData = []
-      console.log(data)
       const allData = data.slice(1, data.length)
       const total = await getHistoryCount()
       const historyData = {
@@ -51,10 +50,12 @@ module.exports = {
   },
   getAllHistoryData: async (req, res) => {
     try {
-      const result = await getAllHistoryDataModel()
+      const { user_id } = req.decodeToken
+      const result = await getAllHistoryDataModel(user_id)
       client.setex('gethistorydata', 3600, JSON.stringify(result))
       return helper.response(res, 200, 'Success Get All Data History', result)
     } catch (error) {
+      console.log(error)
       return helper.response(res, 400, 'Internal Issue', error)
     }
   },

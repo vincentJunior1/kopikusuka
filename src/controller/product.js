@@ -289,6 +289,7 @@ module.exports = {
         console.log('here')
         if (checkId.length > 0) {
           const newData = {
+            ...checkId[0],
             ...setData,
             ...{ product_image: checkId[0].product_image }
           }
@@ -299,18 +300,34 @@ module.exports = {
         }
       } else {
         if (checkId.length > 0) {
-          const newData = {
-            ...setData,
-            ...{ product_image: req.file.filename }
-          }
-          fs.unlink('./uploads/' + checkId[0].product_image, async (err) => {
-            if (err) {
-              return helper.response(res, 400, 'Data Failed Update')
-            } else {
-              const result = await patchProductModel(id, newData)
-              return helper.response(res, 200, 'Data Has Been Updated', result)
+          if (checkId[0].product_image === '') {
+            const newData = {
+              ...checkId[0],
+              ...setData,
+              ...{ product_image: req.file.filename }
             }
-          })
+            const result = await patchProductModel(id, newData)
+            return helper.response(res, 200, 'Data Has Been Updated', result)
+          } else {
+            const newData = {
+              ...checkId[0],
+              ...setData,
+              ...{ product_image: req.file.filename }
+            }
+            fs.unlink('./uploads/' + checkId[0].product_image, async (err) => {
+              if (err) {
+                return helper.response(res, 400, 'Data Failed Update')
+              } else {
+                const result = await patchProductModel(id, newData)
+                return helper.response(
+                  res,
+                  200,
+                  'Data Has Been Updated',
+                  result
+                )
+              }
+            })
+          }
         } else {
           return helper.response(res, 404, `Data Not Found By Id ${id}`)
         }

@@ -12,9 +12,19 @@ const {
   getAllHistoryData
 } = require('../controller/c_payment')
 
-router.get('/', authorization, getHistoryDataRedis, getAllHistoryData)
+router.get('/allhistory', authorization, getHistoryDataRedis, getAllHistoryData)
 router.post('/', authorization, clearDataHistoryRedis, paymentProduct)
-router.get('/:id', authorization, getHistoryDataByIdRedis, getHistoryProduct)
-router.delete('/', authorization, clearDataHistoryRedis, deleteHistory)
+router.get(
+  '/detail/:id',
+  authorization,
+  getHistoryDataByIdRedis,
+  getHistoryProduct
+)
+router.delete(
+  '/deletehistory/:id',
+  authorization,
+  clearDataHistoryRedis,
+  deleteHistory
+)
 
 module.exports = router

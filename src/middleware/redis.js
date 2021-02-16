@@ -14,7 +14,6 @@ module.exports = {
           JSON.parse(result)
         )
       } else {
-        console.log('data tidak ada dalam redis')
         next()
       }
     })
@@ -23,7 +22,6 @@ module.exports = {
     client.get(`getproduct:${JSON.stringify(req.query)}`, (error, result) => {
       if (!error && result != null) {
         const newResult = JSON.parse(result)
-        console.log(error)
         return helper.response(
           res,
           200,
@@ -156,6 +154,7 @@ module.exports = {
       if (result.length > 0) {
         result.forEach((value) => {
           client.del(value)
+          next()
         })
         next()
       } else {
@@ -168,6 +167,7 @@ module.exports = {
       if (result.length > 0) {
         result.forEach((value) => {
           client.del(value)
+          next()
         })
       } else {
         next()
