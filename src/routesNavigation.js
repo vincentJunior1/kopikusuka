@@ -1,4 +1,4 @@
-const router = require('Express').Router()
+const router = require('express').Router()
 const product = require('./routes/product')
 const category = require('./routes/r_category')
 const cupon = require('./routes/r_cupon')
