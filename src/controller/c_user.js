@@ -68,7 +68,7 @@ module.exports = {
           })
 
           const mailOPtion = {
-            from: `"Sky Router "${process.env.EMAIL}`,
+            from: `"KopiKuSuka"${process.env.EMAIL}`,
             to: `${user_email}`,
             subject: 'Confirmation Email',
             html: `<h2>Welcome at Kopikusuka before you searching Ticket Please Activation  Your Account First on this Button</h2>
