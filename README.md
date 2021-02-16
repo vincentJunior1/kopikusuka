@@ -30,7 +30,13 @@
 Open .env file on your favorite code editor, and copy paste this code below :
 
 ```
-DB_HOST=localhost // Database host
+DB_HOST=localhost
+DB_USER=root
+DB_PASS=
+DB_DATABASE=beginer_backend
+PORT=3000
+EMAIL = Your Email
+PASS = Your Password
 ```
 
 ## License
