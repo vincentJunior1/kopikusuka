@@ -68,15 +68,7 @@ module.exports = {
   getHistoryDetailModel: (id) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        `SELECT 
-          product.product_name,history.history_invoice,history_detail.history_detail_quantity,
-          product.product_price,history_detail.history_detail_price,category.category_name,size.size_type 
-          FROM history_detail 
-          LEFT JOIN history ON history_detail.history_id = history.history_id 
-          LEFT JOIN product ON history_detail.product_id = product.product_id 
-          LEFT JOIN category ON product.category_id = category.category_id
-          LEFT JOIN size ON history_detail.size_id = size.size_id
-          WHERE history_detail_id = ${id}`,
+        `SELECT * FROM history_detail LEFT JOIN history ON history_detail.history_id = history.history_id WHERE history_detail.history_id = ${id}`,
         (error, result) => {
           !error ? resolve(result) : reject(error)
         }
@@ -90,7 +82,39 @@ module.exports = {
             FROM history_detail 
             LEFT JOIN history ON history_detail.history_id = history.history_id 
             LEFT JOIN user ON history.user_id = user.user_id
-            WHERE history.user_id = ${user_id} AND history_detail_status = 1`,
+            WHERE history.user_id = ${user_id} AND history_detail_status = 1 AND history.history_status = 0`,
+        (error, result) => {
+          !error ? resolve(result) : reject(error)
+        }
+      )
+    })
+  },
+  getAllOrder: () => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        'SELECT * FROM history LEFT JOIN user ON history.user_id = user.user_id WHERE history_status = 1',
+        (error, result) => {
+          !error ? resolve(result) : reject(new Error(error))
+        }
+      )
+    })
+  },
+  getOrderById: (id) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        'SELECT * FROM history WHERE history_id = ? AND history_status = 1',
+        id,
+        (error, result) => {
+          !error ? resolve(result) : reject(new Error(error))
+        }
+      )
+    })
+  },
+  markAsDoneModel: (newData, id) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        'UPDATE history SET ? WHERE history_id = ?',
+        [newData, id],
         (error, result) => {
           !error ? resolve(result) : reject(error)
         }

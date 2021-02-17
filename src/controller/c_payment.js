@@ -9,7 +9,10 @@ const {
   getHistoryByIdModel,
   deleteHistoryStatusModel,
   getHistoryDetailModel,
-  getAllHistoryDataModel
+  getAllHistoryDataModel,
+  getAllOrder,
+  getOrderById,
+  markAsDoneModel
 } = require('../model/payment_model')
 
 module.exports = {
@@ -85,6 +88,34 @@ module.exports = {
       }
     } catch (error) {
       return helper.response(res, 400, 'Failed Delete History', error)
+    }
+  },
+  getAllOrder: async (req, res) => {
+    try {
+      const order = await getAllOrder()
+      return helper.response(res, 200, 'Success Get All Order', order)
+    } catch (error) {
+      return helper.response(res, 400, 'Something Wrong', error)
+    }
+  },
+  markAsDone: async (req, res) => {
+    try {
+      const { id } = req.params
+      const order = await getOrderById(id)
+      if (order.length > 0) {
+        const newData = {
+          ...order[0],
+          ...{ history_status: 0 }
+        }
+        console.log(newData)
+        const result = await markAsDoneModel(newData, id)
+        return helper.response(res, 200, 'Order Has Finished', result)
+      } else {
+        return helper.response(res, 404, 'Order Already Done / Order Not Found')
+      }
+    } catch (error) {
+      console.log(error)
+      return helper.response(res, 400, 'Something Wrong', error)
     }
   }
 }

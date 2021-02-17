@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const { authorization } = require('../middleware/auth')
+const { authorization, isAdmin } = require('../middleware/auth')
 const {
   getHistoryDataRedis,
   clearDataHistoryRedis,
@@ -9,7 +9,9 @@ const {
   paymentProduct,
   getHistoryProduct,
   deleteHistory,
-  getAllHistoryData
+  getAllHistoryData,
+  getAllOrder,
+  markAsDone
 } = require('../controller/c_payment')
 
 router.get('/allhistory', authorization, getHistoryDataRedis, getAllHistoryData)
@@ -26,5 +28,8 @@ router.delete(
   clearDataHistoryRedis,
   deleteHistory
 )
+
+router.get('/order/', authorization, isAdmin, getAllOrder)
+router.delete('/orderdone/:id', authorization, isAdmin, markAsDone)
 
 module.exports = router
