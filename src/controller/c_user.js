@@ -52,7 +52,8 @@ module.exports = {
           user_birthday,
           user_password: encryptPassword,
           user_role,
-          user_status
+          user_status,
+          user_updated_at: new Date()
         }
         const cekEmail = await getDataUserEmail(user_email)
         if (cekEmail.length >= 1) {
@@ -74,7 +75,7 @@ module.exports = {
             subject: 'Confirmation Email',
             html: `<h2>Welcome at Kopikusuka before you searching Ticket Please Activation  Your Account First on this Button</h2>
                 <p>Click This Link For Activation your account</p>
-                <a href ="https://localhost:8080/confirmEmail/${randomTokens}">Activation Email</a>`
+                <a href ="https://kopikusukaa.netlify.app/confirmEmail/${randomTokens}">Activation Email</a>`
           }
           transporter.sendMail(mailOPtion, (err, result) => {
             if (err) {
