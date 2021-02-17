@@ -24,7 +24,7 @@ module.exports = {
   getDataInvoiceInterval: () => {
     return new Promise((resolve, reject) => {
       connection.query(
-        'SELECT SUM(history_subtotal) as invoice_interval,history_created_at FROM `history` WHERE YEAR(history_created_at) = YEAR(NOW()) GROUP BY MONTH(history_created_at)',
+        'SELECT SUM(history_subtotal) as invoice_interval,MONTH(history_created_at) as history_created_at FROM `history` WHERE YEAR(history_created_at) = YEAR(NOW()) GROUP BY MONTH(history_created_at)',
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error))
         }
@@ -34,7 +34,7 @@ module.exports = {
   getDataInvoiceIntervalPerWeek: () => {
     return new Promise((resolve, reject) => {
       connection.query(
-        'SELECT SUM(history_subtotal) as invoice_perweek, history_created_at FROM`history` WHERE MONTH(history_created_at) = MONTH(NOW()) GROUP BY WEEK(history_created_at)',
+        'SELECT SUM(history_subtotal) as invoice_perweek, WEEK(history_created_at) as history_created_at FROM`history` WHERE MONTH(history_created_at) = MONTH(NOW()) GROUP BY WEEK(history_created_at)',
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error))
         }
@@ -44,7 +44,7 @@ module.exports = {
   getDataInvoicePerDay: () => {
     return new Promise((resolve, reject) => {
       connection.query(
-        'SELECT SUM(history_subtotal) as invoice_perweek, history_created_at FROM`history` WHERE WEEK(history_created_at) = WEEK(NOW()) GROUP BY DaTE(history_created_at)',
+        'SELECT SUM(history_subtotal) as invoice_perweek, DATE(history_created_at) as history_created_at FROM`history` WHERE WEEK(history_created_at) = WEEK(NOW()) GROUP BY DaTE(history_created_at)',
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error))
         }
