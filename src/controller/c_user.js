@@ -26,7 +26,6 @@ module.exports = {
         user_lastname,
         user_address,
         user_gender,
-        user_birthday,
         user_phone
       } = req.body
       if (
@@ -36,7 +35,7 @@ module.exports = {
         user_phone === ''
       ) {
         console.log('gagal')
-        return helper.response(res, 400, 'Please Input every field')
+        return helper.response(res, 401, 'Please Input every field')
       } else {
         const salt = bcrypt.genSaltSync(10)
         const encryptPassword = bcrypt.hashSync(user_password, salt)
@@ -49,7 +48,7 @@ module.exports = {
           user_lastname,
           user_address,
           user_gender,
-          user_birthday,
+          user_birthday: new Date(),
           user_password: encryptPassword,
           user_role,
           user_status,
@@ -57,7 +56,7 @@ module.exports = {
         }
         const cekEmail = await getDataUserEmail(user_email)
         if (cekEmail.length >= 1) {
-          return helper.response(res, 400, 'Email Is Registred')
+          return helper.response(res, 402, 'Email Is Registred')
         } else {
           const transporter = nodemailer.createTransport({
             service: 'gmail',
