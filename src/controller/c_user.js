@@ -35,6 +35,7 @@ module.exports = {
         user_status === '' ||
         user_phone === ''
       ) {
+        console.log('gagal')
         return helper.response(res, 400, 'Please Input every field')
       } else {
         const salt = bcrypt.genSaltSync(10)
