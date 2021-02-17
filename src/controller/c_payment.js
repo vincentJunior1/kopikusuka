@@ -107,7 +107,6 @@ module.exports = {
           ...order[0],
           ...{ history_status: 0 }
         }
-        console.log(newData)
         const result = await markAsDoneModel(newData, id)
         return helper.response(res, 200, 'Order Has Finished', result)
       } else {
