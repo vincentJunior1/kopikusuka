@@ -53,6 +53,7 @@ module.exports = {
       const result = await postCuponModel(setData)
       return helper.response(res, 200, 'Cupon Has Been Created', result)
     } catch (error) {
+      console.log(error)
       return helper.response(res, 400, 'Cupon Not Found', error)
     }
   },
