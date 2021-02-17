@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 16, 2021 at 12:32 PM
+-- Generation Time: Feb 17, 2021 at 04:43 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.1
 
@@ -120,7 +120,7 @@ CREATE TABLE `history` (
   `history_delivery_price` int(11) NOT NULL,
   `history_subtotal` int(11) NOT NULL,
   `history_status` int(1) NOT NULL,
-  `payment_method_id` varchar(11) NOT NULL,
+  `payment_method_id` varchar(255) NOT NULL,
   `history_created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
