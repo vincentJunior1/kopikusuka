@@ -34,7 +34,6 @@ module.exports = {
         user_status === '' ||
         user_phone === ''
       ) {
-        console.log('gagal')
         return helper.response(res, 401, 'Please Input every field')
       } else {
         const salt = bcrypt.genSaltSync(10)
@@ -72,13 +71,12 @@ module.exports = {
             from: `"KopiKuSuka"${process.env.EMAIL}`,
             to: `${user_email}`,
             subject: 'Confirmation Email',
-            html: `<h2>Welcome at Kopikusuka before you searching Ticket Please Activation  Your Account First on this Button</h2>
+            html: `<h2>Welcome at Kopikusuka before order your favorite coffee Please Activation  Your Account First on this Button</h2>
                 <p>Click This Link For Activation your account</p>
                 <a href ="https://kopikusukaa.netlify.app/confirmEmail/${randomTokens}">Activation Email</a>`
           }
           transporter.sendMail(mailOPtion, (err, result) => {
             if (err) {
-              console.log(error)
               return helper.response(res, 400, 'Error Send Email', err)
             } else {
               return helper.response(res, 200, 'Success Send Email', result)
@@ -90,7 +88,6 @@ module.exports = {
         }
       }
     } catch (error) {
-      console.log(error)
       return helper.response(res, 400, 'Bad Request', error)
     }
   },
