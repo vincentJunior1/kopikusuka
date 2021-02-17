@@ -1,6 +1,8 @@
 <h1 align="center">ExpressJS - KopiKuSuka RESTfull API</h1>
 
-#background_projek. [More about Express](https://en.wikipedia.org/wiki/Express.js)
+Covid 19 is really big pandemic in 2020 so here it is we make web apps for your coffee.
+Only 1 Click and We delivery your favorite coffee or you want take your coffee but list order to long just order from home and take it.
+KopiKusuka Everyone Favorite. [More about Express](https://en.wikipedia.org/wiki/Express.js)
 
 ## Built With
 
